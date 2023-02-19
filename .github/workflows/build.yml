@@ -1,7 +1,7 @@
-name: Sync Labels
+name: sqlx-cli Release
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * 0"
 
   workflow_dispatch:
   push:
@@ -13,34 +13,50 @@ jobs:
     name: sqlx-cli Release
     runs-on: ubuntu-latest
 
-    permissions: write-all
+    permissions:
+      contents: write
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Setup Cargo
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      
+          target: x86_64-unknown-linux-musl
+
+      - name: Install musl-tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install musl-tools
+
       - name: Build and Install sqlx-cli
         uses: actions-rs/cargo@v1
         with:
           command: install
-          args: sqlx-cli
+          args: sqlx-cli --features postgres,rustls --no-default-features --target x86_64-unknown-linux-musl --root sqlx-cli
 
-      - name: Create release-artifacts directory
+      - name: Create release-artifacts
         run: |
-          mkdir release-artifacts
-          cp $HOME/.cargo/bin/sqlx-cli release-artifacts/sqlx-cli
-      
+          tar -czvf sqlx-cli.tar.gz -C ./sqlx-cli/bin .
+
       - name: Create release
         uses: ncipollo/release-action@v1.12.0
         with:
           removeArtifacts: true
           allowUpdates: true
           artifactErrorsFailBuild: true
-          artifacts: "release-artifacts/*"
+          artifacts: sqlx-cli.tar.gz
           body: |
-            This is a production release of sqlx-cli.
+            This is a production release of sqlx-cli. Staticly compiled for x86_64-unknown-linux-musl.
           prerelease: false
           name: sqlx-cli
           tag: sqlx-cli
+
+      - name: Update sqlx-cli tag
+        run: |
+          git tag -f sqlx-cli
+          git push -f origin sqlx-cli

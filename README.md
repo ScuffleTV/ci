@@ -13,3 +13,14 @@ You can download the binaries from the [releases page](https://github.com/Scuffl
 We build the following binaries:
 
 - [x] [sqlx-cli](https://github.com/launchbadge/sqlx)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+However each binary has its own license. Please check the license of each binary before using it. You can find the license in the binary's repository.
+
+### sqlx-cli
+
+- [APACHE](https://github.com/launchbadge/sqlx/blob/main/LICENSE-APACHE)
+- [MIT](https://github.com/launchbadge/sqlx/blob/main/LICENSE-MIT)

@@ -1,0 +1,46 @@
+name: Sync Labels
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  sqlx-cli:
+    name: sqlx-cli Release
+    runs-on: ubuntu-latest
+
+    permissions: write-all
+
+    steps:
+      - name: Setup Cargo
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      
+      - name: Build and Install sqlx-cli
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: sqlx-cli
+
+      - name: Create release-artifacts directory
+        run: |
+          mkdir release-artifacts
+          cp $HOME/.cargo/bin/sqlx-cli release-artifacts/sqlx-cli
+      
+      - name: Create release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          removeArtifacts: true
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: "release-artifacts/*"
+          body: |
+            This is a production release of sqlx-cli.
+          prerelease: false
+          name: sqlx-cli
+          tag: sqlx-cli

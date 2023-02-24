@@ -2,12 +2,15 @@ name: Docker Build
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    paths:
+      - Dockerfile
+      - .github/workflows/docker.yml
 
 jobs:
   build:
     name: Build
+    # We need to make sure both the Dockerfile and the branch is main
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
     permissions:

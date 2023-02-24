@@ -1,0 +1,31 @@
+name: Docker Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Build Base Image
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/scuffletv/build:${{ github.sha }}
+            ghcr.io/scuffletv/build:latest

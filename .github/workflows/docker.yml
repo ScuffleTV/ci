@@ -38,8 +38,18 @@ jobs:
         uses: docker/build-push-action@v4.0.0
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.base
           push: true
           tags: |
             ghcr.io/scuffletv/build:${{ github.sha }}
             ghcr.io/scuffletv/build:latest
+
+      - name: Build Migrator Image
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          file: ./Dockerfile.migrator
+          push: true
+          tags: |
+            ghcr.io/scuffletv/migrator:${{ github.sha }}
+            ghcr.io/scuffletv/migrator:latest

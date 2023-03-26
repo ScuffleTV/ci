@@ -42,7 +42,19 @@ RUN <<eot
         libcairo2 \
         libasound2 \
         gnupg2 \
-        ca-certificates
+        ca-certificates \
+        software-properties-common \
+        libssl-dev \
+        pkg-config
+
+    curl https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
+
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+    tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
+
+    apt-get update
+    apt-get install -y --no-install-recommends terraform
 
     # Install Node.js and Yarn
     curl -sL https://deb.nodesource.com/setup_18.x | bash -
@@ -65,7 +77,7 @@ RUN <<eot
 
     cargo install cargo-binstall
     cargo install cargo-watch
-    cargo install sqlx-cli --features rustls,postgres --no-default-features
+    cargo install sqlx-cli --features native-tls,postgres --no-default-features --git https://github.com/launchbadge/sqlx --branch main
     cargo binstall wasm-pack -y
     cargo binstall cargo-llvm-cov -y
     cargo binstall cargo-nextest -y

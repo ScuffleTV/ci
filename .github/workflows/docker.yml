@@ -18,6 +18,16 @@ jobs:
       contents: read
       packages: write
 
+    strategy:
+      matrix:
+        include:
+          - name: build
+            file: Dockerfile.build
+          - name: migrator
+            file: Dockerfile.migrator
+          - name: nats
+            file: Dockerfile.nats
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,22 +44,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Base Image
+      - name: Build Image
         uses: docker/build-push-action@v4.0.0
         with:
           context: .
-          file: ./Dockerfile.base
+          file: ./${{ matrix.file }}
           push: true
           tags: |
-            ghcr.io/scuffletv/build:${{ github.sha }}
-            ghcr.io/scuffletv/build:latest
-
-      - name: Build Migrator Image
-        uses: docker/build-push-action@v4.0.0
-        with:
-          context: .
-          file: ./Dockerfile.migrator
-          push: true
-          tags: |
-            ghcr.io/scuffletv/migrator:${{ github.sha }}
-            ghcr.io/scuffletv/migrator:latest
+            ghcr.io/scuffletv/${{ matrix.name }}:${{ github.sha }}
+            ghcr.io/scuffletv/${{ matrix.name }}:latest

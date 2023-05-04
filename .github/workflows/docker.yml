@@ -25,8 +25,8 @@ jobs:
             file: Dockerfile.build
           - name: migrator
             file: Dockerfile.migrator
-          - name: nats
-            file: Dockerfile.nats
+          - name: cockroach
+            file: Dockerfile.cockroach
 
     steps:
       - name: Checkout

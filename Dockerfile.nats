@@ -1,3 +1,0 @@
-FROM bitnami/nats:latest
-
-CMD [ "/opt/bitnami/scripts/nats/run.sh", "-js" ]

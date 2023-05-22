@@ -48,10 +48,10 @@ RUN <<eot
 
 
     curl -sL https://deb.nodesource.com/setup_18.x | bash -
-    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null
-    echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list >/dev/null
     apt-get update
-    apt-get install -y nodejs yarn --no-install-recommends 
+    apt-get install -y nodejs --no-install-recommends
+
+    npm install -g pnpm 
 
     # Install Rust
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain=$RUST_VERSION

@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - Dockerfile
+      - Dockerfile.*
       - .github/workflows/docker.yml
 
 jobs:

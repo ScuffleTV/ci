@@ -63,6 +63,7 @@ RUN <<eot
     cargo install sqlx-cli --features native-tls,postgres --no-default-features --git https://github.com/launchbadge/sqlx --branch main
     cargo install cargo-llvm-cov
     cargo install cargo-nextest
+    cargo install wasm-pack
     cargo install mask
 
     # Clean up 

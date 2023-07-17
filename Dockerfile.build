@@ -65,6 +65,7 @@ RUN <<eot
     cargo install cargo-nextest
     cargo install wasm-pack
     cargo install mask
+    cargo install cargo-sweep --git https://github.com/holmgr/cargo-sweep --branch master
 
     # Clean up 
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git 

@@ -22,11 +22,11 @@ jobs:
       matrix:
         include:
           - name: build
-            file: Dockerfile.build
+            file: build.dockerfile
           - name: migrator
-            file: Dockerfile.migrator
+            file: migrator.dockerfile
           - name: cockroach
-            file: Dockerfile.cockroach
+            file: cockroach.dockerfile
 
     steps:
       - name: Checkout

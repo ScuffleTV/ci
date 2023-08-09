@@ -9,7 +9,7 @@ ENV CARGO_HOME=/usr/local/cargo \
     RUSTUP_HOME=/usr/local/rustup \
     PATH=/usr/local/cargo/bin:/usr/local/yarn/bin:$PATH
 
-ARG RUST_VERSION=1.71.0
+ARG RUST_VERSION=1.71.1
 
 RUN <<eot
     set -eux
@@ -58,14 +58,21 @@ RUN <<eot
 
     # Install Rust tools
     rustup update
+    rustup target add wasm32-unknown-unknown
     rustup component add clippy rustfmt llvm-tools-preview
 
     cargo install sqlx-cli --features native-tls,postgres --no-default-features --git https://github.com/launchbadge/sqlx --branch main
     cargo install cargo-llvm-cov
     cargo install cargo-nextest
-    cargo install wasm-pack
+    cargo install wasm-bindgen-cli
     cargo install mask
     cargo install cargo-sweep --git https://github.com/holmgr/cargo-sweep --branch master
+
+    # Install Wasm tools
+    wget https://github.com/WebAssembly/binaryen/releases/download/version_114/binaryen-version_114-x86_64-linux.tar.gz -O /tmp/binaryen.tar.gz
+    tar -xvf /tmp/binaryen.tar.gz -C /tmp
+    mv /tmp/binaryen-version_114/bin/* /usr/local/bin/
+    rm -rf /tmp/binaryen.tar.gz /tmp/binaryen-version_114
 
     # Clean up 
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git 

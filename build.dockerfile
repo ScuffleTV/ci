@@ -5,16 +5,16 @@ FROM $BASE_IMAGE
 
 LABEL org.opencontainers.image.source=https://github.com/scuffletv/ci
 LABEL org.opencontainers.image.description="Build for ScuffleTV"
-LABEL org.opencontainers.image.licenses=BSD-4-Clause
+LABEL org.opencontainers.image.licenses=MIT
 
 ENV CARGO_HOME=/usr/local/cargo \
     RUSTUP_HOME=/usr/local/rustup \
     PATH=/usr/local/cargo/bin:/usr/local/pnpm/bin:$PATH
 
-ARG RUST_VERSION=1.73.0
+ARG RUST_VERSION=1.74.0
 ARG NODE_MAJOR=20
 ARG WASM_BINDGEN_VERSION=116
-ARG PROTOBUF_VERSION=v24.4
+ARG PROTOBUF_VERSION=v25.1
 
 RUN <<eot
     set -eux

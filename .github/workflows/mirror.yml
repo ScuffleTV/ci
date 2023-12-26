@@ -1,0 +1,49 @@
+name: Sync GitHub Mirrors
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/mirror.yml
+
+jobs:
+  sync:
+    name: Sync
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        mirrors:
+          - upstream: "https://code.videolan.org/videolan/x264.git"
+            mirror: "github.com/ScuffleTV/x264-mirror.git"
+
+          - upstream: "https://code.videolan.org/videolan/dav1d.git"
+            mirror: "github.com/ScuffleTV/dav1d-mirror.git"
+
+    steps:
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@user.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Clone Upstream
+        run: |
+          i=0
+          until git clone --bare ${{ matrix.mirrors.upstream }} repo
+          do
+            i = $((i + 1))
+            if [ $i -gt 5 ]
+            then
+              echo "Failed to clone ${{ matrix.mirrors.upstream }} after 5 attempts"
+              exit 1
+            fi
+          done
+
+          echo "Cloned ${{ matrix.mirrors.upstream }} to repo on attempt $i"
+
+      - name: Push to Mirror
+        run: |
+          cd repo
+          git push --mirror https://${{ secrets.ACTIONS_REPO_SYNC_TOKEN }}@${{ matrix.mirrors.mirror }} --force

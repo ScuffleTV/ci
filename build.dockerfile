@@ -11,10 +11,8 @@ ENV CARGO_HOME=/usr/local/cargo \
     RUSTUP_HOME=/usr/local/rustup \
     PATH=/usr/local/cargo/bin:/usr/local/pnpm/bin:$PATH
 
-ARG RUST_VERSION=1.74.0
 ARG NODE_MAJOR=20
 ARG WASM_BINDGEN_VERSION=116
-ARG PROTOBUF_VERSION=v25.1
 
 RUN <<eot
     set -eux
@@ -25,7 +23,6 @@ RUN <<eot
             clang \
             lld \
             make \
-            dpkg-dev \
             zip \
             unzip \
             curl \
@@ -38,32 +35,18 @@ RUN <<eot
             cmake \
             clang-format \
             ninja-build \
-            libssl-dev \
-            ffmpeg
+            nasm \
+            yasm \
+            meson \
+            libtool \
+            autoconf \
+            automake
 
-    # We want to symlink clang-17 to clang and cc so that we can use it as a drop in replacement for gcc
-    touch /usr/bin/cc  && mv /usr/bin/cc /usr/bin/cc.bak
-    touch /usr/bin/c++ && mv /usr/bin/c++ /usr/bin/c++.bak
-    touch /usr/bin/gcc && mv /usr/bin/gcc /usr/bin/gcc.bak
-    touch /usr/bin/g++ && mv /usr/bin/g++ /usr/bin/g++.bak
-
-    ln -s $(which clang) /usr/bin/cc
-    ln -s $(which clang) /usr/bin/gcc
-    ln -s $(which clang++) /usr/bin/c++
-    ln -s $(which clang++) /usr/bin/g++
-
-    touch /usr/bin/ld && mv /usr/bin/ld /usr/bin/ld.bak
-    ln -s $(which lld) /usr/bin/ld
-
-    # Compile protobuf
-    git clone https://github.com/protocolbuffers/protobuf.git -b $PROTOBUF_VERSION /tmp/protobuf --depth 1 --recurse-submodules
-    mkdir /tmp/protobuf/build
-    cd /tmp/protobuf/build
-    cmake -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release -GNinja ..
-    cmake --build . --target install -j $(nproc) --config Release
+    # Install all external libraries
+    git clone https://github.com/ScuffleTV/external.git --depth 1 --recurse-submodule --shallow-submodules /tmp/external
+    /tmp/external/build.sh --prefix /usr/local
     ldconfig
-    cd -
-    rm -rf /tmp/protobuf
+    rm -rf /tmp/external
 
     mkdir -p /etc/apt/keyrings
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
@@ -76,10 +59,11 @@ RUN <<eot
     npm install -g pnpm
 
     # Install Rust
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain=$RUST_VERSION
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain=nightly
 
     # Install Rust tools
     rustup update
+
     rustup target add wasm32-unknown-unknown
     rustup component add clippy rustfmt llvm-tools-preview
 
@@ -101,7 +85,8 @@ RUN <<eot
     apt-get autoremove -y
     apt-get clean
     rm -rf /var/lib/apt/lists/*
+    rm -rf /root/.npm
 
     # Remove SSH host keys, for some reason they are generated on build.
-    rm -rf /etc/ssh/ssh_host_* 
+    rm -rf /etc/ssh/ssh_host_*
 eot

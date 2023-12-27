@@ -23,8 +23,6 @@ jobs:
         include:
           - name: build
             file: build.dockerfile
-          - name: migrator
-            file: migrator.dockerfile
           - name: cockroach
             file: cockroach.dockerfile
 

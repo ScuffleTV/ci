@@ -11,7 +11,7 @@ ENV CARGO_HOME=/usr/local/cargo \
     RUSTUP_HOME=/usr/local/rustup \
     PATH=/usr/local/cargo/bin:/usr/local/pnpm/bin:$PATH
 
-ARG RUST_VERSION=nightly
+ARG RUST_VERSION=1.74.1
 ARG NODE_MAJOR=20
 ARG WASM_BINDGEN_VERSION=116
 
@@ -64,6 +64,7 @@ RUN <<eot
 
     # Install Rust tools
     rustup update
+    rustup toolchain install nightly
 
     rustup target add wasm32-unknown-unknown
     rustup component add clippy rustfmt llvm-tools-preview

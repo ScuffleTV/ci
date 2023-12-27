@@ -1,6 +1,9 @@
 name: Docker Build
 on:
   workflow_dispatch:
+  schedule:
+    # Run every day at midnight
+    - cron: '0 0 * * *'
   push:
     paths:
       - Dockerfile.*

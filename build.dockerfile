@@ -11,6 +11,7 @@ ENV CARGO_HOME=/usr/local/cargo \
     RUSTUP_HOME=/usr/local/rustup \
     PATH=/usr/local/cargo/bin:/usr/local/pnpm/bin:$PATH
 
+ARG RUST_VERSION=nightly
 ARG NODE_MAJOR=20
 ARG WASM_BINDGEN_VERSION=116
 
@@ -59,7 +60,7 @@ RUN <<eot
     npm install -g pnpm
 
     # Install Rust
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain=nightly
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain=$RUST_VERSION
 
     # Install Rust tools
     rustup update

@@ -6,6 +6,7 @@ on:
     - cron: '0 0 * * *'
   push:
     paths:
+      - '*.dockerfile'
       - Dockerfile.*
       - .github/workflows/docker.yml
 

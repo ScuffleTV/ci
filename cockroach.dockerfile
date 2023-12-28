@@ -1,3 +1,5 @@
 FROM cockroachdb/cockroach:latest
 
-CMD [ "start-single-node", "--insecure" ]
+COPY entrypoint.sh /scuffle-entrypoint.sh
+
+ENTRYPOINT [ "/scuffle-entrypoint.sh", "/cockroach/cockroach.sh" ]

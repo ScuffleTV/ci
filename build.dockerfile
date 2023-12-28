@@ -41,7 +41,8 @@ RUN <<eot
             meson \
             libtool \
             autoconf \
-            automake
+            automake \
+            build-essential
 
     # Install all external libraries
     git clone https://github.com/ScuffleTV/external.git --depth 1 --recurse-submodule --shallow-submodules /tmp/external
@@ -65,6 +66,9 @@ RUN <<eot
     # Install Rust tools
     rustup update
     rustup toolchain install nightly
+
+    rustup +nightly component add clippy
+    rustup +nightly component add rustfmt
 
     rustup target add wasm32-unknown-unknown
     rustup component add clippy rustfmt llvm-tools-preview

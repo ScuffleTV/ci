@@ -42,11 +42,12 @@ RUN <<eot
             libtool \
             autoconf \
             automake \
-            build-essential
+            build-essential \
+            libssl-dev
 
     # Install all external libraries
     git clone https://github.com/ScuffleTV/external.git --depth 1 --recurse-submodule --shallow-submodules /tmp/external
-    /tmp/external/build.sh --prefix /usr/local
+    /tmp/external/build.sh --prefix /usr/local --build "all ffmpeg+tls"
     ldconfig
     rm -rf /tmp/external
 

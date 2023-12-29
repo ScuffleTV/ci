@@ -6,9 +6,7 @@ on:
     - cron: '0 0 * * *'
   push:
     paths:
-      - '*.dockerfile'
-      - Dockerfile.*
-      - entrypoint.sh
+      - docker/**/*
       - .github/workflows/docker.yml
 
 jobs:
@@ -27,15 +25,15 @@ jobs:
       matrix:
         include:
           - name: build
-            file: build.dockerfile
+            file: docker/build.dockerfile
           - name: cockroach
-            file: cockroach.dockerfile
+            file: docker/cockroach.dockerfile
           - name: minio
-            file: minio.dockerfile
+            file: docker/minio.dockerfile
           - name: nats
-            file: nats.dockerfile
+            file: docker/nats.dockerfile
           - name: redis
-            file: redis.dockerfile
+            file: docker/redis.dockerfile
 
     steps:
       - name: Checkout

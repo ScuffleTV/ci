@@ -8,6 +8,7 @@ on:
     paths:
       - '*.dockerfile'
       - Dockerfile.*
+      - entrypoint.sh
       - .github/workflows/docker.yml
 
 jobs:

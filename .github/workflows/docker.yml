@@ -14,7 +14,6 @@ jobs:
     name: Build
     # We need to make sure both the Dockerfile and the branch is main
     if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
 
     permissions:
       actions: write
@@ -26,14 +25,21 @@ jobs:
         include:
           - name: build
             file: docker/build.dockerfile
+            runs-on: scuffle-ci-ryzen-9-7950x3d
           - name: cockroach
             file: docker/cockroach.dockerfile
+            runs-on: ubuntu-latest
           - name: minio
             file: docker/minio.dockerfile
+            runs-on: ubuntu-latest
           - name: nats
             file: docker/nats.dockerfile
+            runs-on: ubuntu-latest
           - name: redis
             file: docker/redis.dockerfile
+            runs-on: ubuntu-latest
+
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
       - name: Checkout

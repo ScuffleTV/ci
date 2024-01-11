@@ -25,7 +25,9 @@ apt-get install -y --no-install-recommends \
         autoconf \
         automake \
         build-essential \
-        libssl-dev
+        libssl-dev \
+        libpng-dev \
+        libjpeg-dev
 
 # Install all external libraries
 git clone https://github.com/ScuffleTV/external.git --depth 1 --recurse-submodule --shallow-submodules /tmp/external

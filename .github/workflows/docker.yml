@@ -25,7 +25,7 @@ jobs:
         include:
           - name: build
             file: docker/build.dockerfile
-            runs-on: scuffle-ci
+            runs-on: ubuntu-latest
           - name: cockroach
             file: docker/cockroach.dockerfile
             runs-on: ubuntu-latest

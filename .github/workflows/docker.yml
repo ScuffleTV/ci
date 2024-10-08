@@ -38,6 +38,9 @@ jobs:
           - name: redis
             file: docker/redis.dockerfile
             runs-on: ubuntu-latest
+          - name: backup
+            file: docker/backup.dockerfile
+            runs-on: ubuntu-latest
 
     runs-on: ${{ matrix.runs-on }}
 

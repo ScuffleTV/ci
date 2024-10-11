@@ -22,7 +22,7 @@ clickhouse() {
 
     log "INFO" "Starting ClickHouse backup"
 
-    invoke bash -c "echo \"$backup_query\" | curl \"http://${user_info}${DB_HOST}:${DB_PORT}/?\" --data-binary @-"
+    invoke bash -c "echo \"$backup_query\" | curl \"http://${user_info}${DB_HOST}:${DB_PORT}/?\" --data-binary @- --fail-with-body"
 }
 
 clickhouse "$@"

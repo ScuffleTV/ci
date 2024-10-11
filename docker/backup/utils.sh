@@ -170,10 +170,6 @@ s3_upload() {
     # strip file from $OUTPUT_FILE
     local ext=${file/#"$TMP_DIR/$OUTPUT_FILE"}
 
-    echo "ext: $ext"
-    echo "file: $file"
-    echo "OUTPUT_FILE: $OUTPUT_FILE"
-
     local args=(
         --endpoint-url "$S3_ENDPOINT"
         s3

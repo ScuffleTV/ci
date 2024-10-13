@@ -1,8 +1,7 @@
 #!/bin/bash
 
 clickhouse() {
-
-    local backup_query="BACKUP ALL TO S3('${S3_ENDPOINT}/${S3_BUCKET}/${OUTPUT_FILE}.tar.gz', '${AWS_ACCESS_KEY_ID}', '${AWS_SECRET_ACCESS_KEY}');"
+    local backup_query="BACKUP ${CLICKHOUSE_BACKUP_TARGETS:-ALL} TO S3('${S3_ENDPOINT}/${S3_BUCKET}/${OUTPUT_FILE}.tar.gz', '${AWS_ACCESS_KEY_ID}', '${AWS_SECRET_ACCESS_KEY}');"
 
     if [ -n "$EXTRA_ARGS" ]; then
         backup_query="${backup_query} ${EXTRA_ARGS}"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mongodb() {
-    local output_file="${TMP_DIR}/${OUTPUT_FILE}.tar.gz"
+    local output_file="${TMP_DIR}/${OUTPUT_FILE}.gz"
 
     or_default "DB_PORT" "27017"
 
